@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Monitoreo Inteligente de Almacén</h1>
+        <a href="{% url 'reporte_pdf' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-md transition-all flex items-center gap-2">
+            Descargar Reporte PDF
+        </a>
+    </div>
+
+    <!-- Indicadores KPI -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-400">
+            <p class="text-sm text-gray-500 uppercase font-bold">Total Productos</p>
+            <p class="text-3xl font-bold text-gray-800">{{ kpis.total_productos }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Productos Críticos</p>
+            <p class="text-3xl font-bold text-red-600">{{ kpis.productos_criticos }}</p>
+            <p class="text-xs text-red-400 mt-1">Requieren resurtido urgente</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Salud Inventario</p>
+            <p class="text-3xl font-bold text-green-600">{{ kpis.salud }}%</p>
+            <p class="text-xs text-green-400 mt-1">Disponibilidad de stock óptima</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Sin Movimiento</p>
+            <p class="text-3xl font-bold text-yellow-600">{{ kpis.sin_movimiento }}</p>
+            <p class="text-xs text-yellow-500 mt-1">Baja rotación detectada</p>
+        </div>
+    </div>
+
+    <!-- Gráfica de Stock -->
+    <div class="flex justify-center mb-10">
+        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-700 text-center">Nivel de Stock por Categoría</h2>
+            {% if grafica_url %}
+                <div class="flex justify-center">
+                    <img src="{% static grafica_url %}" alt="Gráfica de Inventario" class="rounded">
+                </div>
+            {% else %}
+                <p class="text-gray-500 italic text-center">Sin datos de stock disponibles.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Semáforo de Inventario (Tabla) -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-6 border-b bg-gray-50">
+            <h2 class="text-xl font-bold text-gray-700">Semáforo de Existencias</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-4 font-bold">Producto</th>
+                        <th class="px-6 py-4 font-bold">Categoría</th>
+                        <th class="px-6 py-4 font-bold">Stock</th>
+                        <th class="px-6 py-4 font-bold">Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for p in inventario %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium">{{ p.producto }}</td>
+                        <td class="px-6 py-4 text-gray-500">{{ p.categoria }}</td>
+                        <td class="px-6 py-4 font-bold {% if p.color == 'red' %}text-red-600{% elif p.color == 'yellow' %}text-yellow-600{% else %}text-green-600{% endif %}">
+                            {{ p.stock }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold
+                                {% if p.color == 'red' %} bg-red-100 text-red-700
+                                {% elif p.color == 'yellow' %} bg-yellow-100 text-yellow-700
+                                {% else %} bg-green-100 text-green-700 {% endif %}">
+                                {{ p.estado }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

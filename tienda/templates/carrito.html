@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-10">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Tu Carrito de Compras</h2>
+        <a href="/dashboard/" class="hover:opacity-80 font-medium flex items-center gap-1 transition-colors" style="color: #5A8A57;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Seguir comprando
+        </a>
+    </div>
+
+    {% if items %}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- LISTA DE PRODUCTOS -->
+        <div class="lg:col-span-2 space-y-4">
+            {% for i in items %}
+            <div class="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 hover:shadow-md transition-shadow">
+                <!-- Placeholder de imagen -->
+                <div class="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                </div>
+                
+                <div class="flex-grow text-center sm:text-left">
+                    <h3 class="text-lg font-bold text-gray-800">{{ i.producto.nombre }}</h3>
+                    <p class="text-gray-500 text-sm line-clamp-1">{{ i.producto.categoria.nombre }}</p>
+                    <p class="font-bold mt-1" style="color: #5A8A57;">${{ i.producto.precio }} <span class="text-gray-400 font-normal text-xs">c/u</span></p>
+                </div>
+
+                <div class="flex flex-col items-center sm:items-end gap-3 flex-shrink-0">
+                    <!-- Controles de cantidad -->
+                    <div class="flex items-center bg-gray-50 border border-gray-200 rounded-lg p-1">
+                        <a href="/restar/{{i.id}}/" class="p-1 hover:bg-white rounded-md transition-colors text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                            </svg>
+                        </a>
+                        <span class="px-3 font-bold text-gray-800">{{ i.cantidad }}</span>
+                        <a href="/agregar/{{i.producto.id}}/" class="p-1 hover:bg-white rounded-md transition-colors text-gray-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <a href="/eliminar/{{i.id}}/" class="text-red-500 hover:text-red-700 text-xs font-medium flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Eliminar
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- RESUMEN DE PAGO -->
+        <div class="lg:col-span-1">
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-6 sticky top-8">
+                <h4 class="text-xl font-bold text-gray-900 mb-6">Resumen de Orden</h4>
+                
+                <div class="space-y-4 mb-6 border-b border-gray-200 pb-6 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Subtotal de productos</span>
+                        <span class="font-medium text-gray-900">${{ total }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500" style="color: #5A8A57;">Envío</span>
+                        <span class="font-medium" style="color: #5A8A57;">Gratis</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Impuestos (Estimados)</span>
+                        <span class="text-gray-900">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-lg font-bold text-gray-900">Total</span>
+                    <span class="text-3xl font-black" style="color: #5A8A57;">${{ total }}</span>
+                </div>
+
+                <a href="{% url 'checkout' %}" class="w-full inline-flex items-center justify-center px-6 py-4 text-white font-bold rounded-xl hover:opacity-90 focus:ring-4 transition-all shadow-lg uppercase tracking-widest text-sm" style="background-color: #5A8A57;">
+                    Finalizar Compra
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+
+                <p class="mt-4 text-center text-xs text-gray-400">
+                    Transacción segura protegida por Mi Ferreteria
+                </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="bg-gray-50 rounded-2xl p-16 text-center border-2 border-dashed border-gray-200">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6 text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900">Tu carrito está vacío</h3>
+        <p class="text-gray-500 mt-2 max-w-sm mx-auto">Parece que aún no has agregado nada. ¡Explora nuestro catálogo y encuentra lo que necesitas!</p>
+        <a href="/dashboard/" class="mt-8 inline-flex items-center px-8 py-3 bg-purple-400 text-white font-bold rounded-xl hover:bg-purple-500 transition-all shadow-lg shadow-purple-100">
+            Explorar Productos
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

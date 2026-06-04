@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Dashboard de Segmentación de Clientes (IA)</h1>
+
+    <!-- Tarjetas de Resumen -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Total Clientes</p>
+            <p class="text-2xl font-bold text-gray-800">{{ resumen.total_clientes }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Premium</p>
+            <p class="text-2xl font-bold text-green-600">{{ resumen.premium }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Ocasionales</p>
+            <p class="text-2xl font-bold text-orange-600">{{ resumen.ocasionales }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Inactivos</p>
+            <p class="text-2xl font-bold text-red-600">{{ resumen.inactivos }}</p>
+        </div>
+    </div>
+
+    <!-- Sección de Gráfica Centrada -->
+    <div class="flex justify-center mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-700 text-center">Distribución de Clusters</h2>
+            {% if grafica_url %}
+                <div class="flex justify-center">
+                    <img src="{% static grafica_url %}" alt="Gráfica de Segmentación" class="rounded shadow-sm">
+                </div>
+            {% else %}
+                <p class="text-gray-500 italic text-center">No hay suficientes datos para generar la gráfica.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tabla Detallada -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-6 border-b">
+            <h2 class="text-xl font-bold text-gray-700">Clasificación Inteligente de Clientes</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-4 font-bold">Usuario</th>
+                        <th class="px-6 py-4 font-bold">Total Gastado</th>
+                        <th class="px-6 py-4 font-bold">Frecuencia</th>
+                        <th class="px-6 py-4 font-bold">Días Inactivo</th>
+                        <th class="px-6 py-4 font-bold">Clasificación</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-gray-700">
+                    {% for cliente in clientes %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-medium">{{ cliente.username }}</td>
+                        <td class="px-6 py-4 text-green-600 font-bold">${{ cliente.total_gastado|floatformat:2 }}</td>
+                        <td class="px-6 py-4">{{ cliente.frecuencia }} compras</td>
+                        <td class="px-6 py-4">{{ cliente.recencia }} días</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold
+                                {% if cliente.categoria == 'Clientes Premium' %} bg-green-100 text-green-700
+                                {% elif cliente.categoria == 'Clientes Ocasionales' %} bg-orange-100 text-orange-700
+                                {% else %} bg-red-100 text-red-700 {% endif %}">
+                                {{ cliente.categoria }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

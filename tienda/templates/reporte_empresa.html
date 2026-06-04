@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-10 text-gray-800 border-b-2 border-purple-100 pb-4">Tablero de Control: Empresa</h1>
+
+    <!-- APARTADO 1: ESTATUS DE LA EMPRESA -->
+    <section class="mb-16">
+        <h2 class="text-xl font-bold mb-6 text-purple-700 uppercase tracking-wider">I. Estatus de la Empresa</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Ventas último mes -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-2">Ventas último mes (MX)</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-gray-800">${{ metricas.mes|floatformat:2 }}</span>
+                </div>
+                <div class="mt-4 flex items-center gap-1 {% if comparativas.var_mes >= 0 %}text-green-500{% else %}text-red-500{% endif %} font-bold text-sm">
+                    {% if comparativas.var_mes >= 0 %}
+                        <span>↑</span>
+                    {% else %}
+                        <span>↓</span>
+                    {% endif %}
+                    {{ comparativas.var_mes }}%
+                </div>
+            </div>
+
+            <!-- Card 2: Pedidos frecuentes -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-2">Pedidos frecuentes</p>
+                <span class="text-3xl font-black text-purple-600">{{ operaciones.pedidos_frecuentes }}</span>
+                <p class="text-xs text-gray-400 mt-2 font-medium italic">Activos, repetidos</p>
+            </div>
+
+            <!-- Card 3: Productos TOP (por volumen) -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-4">Productos TOP (volumen)</p>
+                <ul class="space-y-3">
+                    {% for p in clasificaciones.productos_top %}
+                    <li class="flex items-center gap-3 text-sm font-semibold text-gray-700">
+                        <span class="p-1.5 bg-blue-50 rounded-lg text-lg">{{ p.icono }}</span>
+                        {{ p.producto__nombre|truncatechars:25 }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Card 4: Tasa de conversión -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col justify-center items-center text-center">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-4">Tasa de conversión de pedidos</p>
+                <span class="text-4xl font-black text-indigo-600">{{ operaciones.tasa_conversion }}%</span>
+            </div>
+
+            <!-- Card 5: Productos en movimiento -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-4">Productos en movimiento</p>
+                <div class="flex justify-center mb-4">
+                    {% if sparkline_url %}
+                        <img src="{% static sparkline_url %}" alt="Movimiento" class="w-full h-16">
+                    {% endif %}
+                </div>
+                <div class="pt-2 border-t border-gray-50 text-center">
+                    <span class="text-xs font-bold text-purple-500 bg-purple-50 px-3 py-1 rounded-full uppercase">
+                        {{ operaciones.categoria_movimiento }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card 6: Productos menos TOP (Alerta) -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-400 hover:shadow-md transition-shadow">
+                <p class="text-sm text-gray-500 font-bold uppercase mb-4">Productos menos TOP (Alerta)</p>
+                <ul class="space-y-3">
+                    {% for p in clasificaciones.productos_alerta %}
+                    <li class="flex items-center gap-3 text-sm font-semibold text-red-700">
+                        <span class="text-lg">⚠️</span>
+                        {{ p.producto__nombre|truncatechars:25 }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- APARTADO 2: ESTATUS DE CLIENTES -->
+    <section class="mb-16">
+        <h2 class="text-xl font-bold mb-6 text-purple-700 uppercase tracking-wider">II. Estatus de Clientes</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            
+            <!-- Columna Izquierda: Mejores Clientes -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-700 mb-6 flex items-center gap-2">
+                    <span>🏆</span> Mejores clientes (por valor)
+                </h3>
+                <div class="space-y-6">
+                    {% for c in clasificaciones.clientes_vip %}
+                    <div class="flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <!-- Avatar Circular -->
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-xl border-2 border-white shadow-sm group-hover:scale-110 transition-transform">
+                                {{ c.username|first|upper }}
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">{{ c.username }}</p>
+                                <p class="text-xs text-gray-400">Cliente Distinguido</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-purple-700 text-lg">${{ c.total_acumulado|floatformat:2 }}</p>
+                            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">Total Acumulado</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Categorías Clave -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <h3 class="text-lg font-bold text-gray-700 mb-6 self-start">Categorías clave de mejores clientes</h3>
+                <div class="w-full flex justify-center mb-4">
+                    {% if dona_url %}
+                        <img src="{% static dona_url %}" alt="Distribución Categorías" class="max-h-64 object-contain">
+                    {% endif %}
+                </div>
+                <!-- Leyenda decorativa (La real está en la imagen, esta es para la UI) -->
+                <div class="mt-4 flex flex-wrap justify-center gap-4 text-xs font-bold text-gray-500 uppercase">
+                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> Principal</div>
+                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-400"></span> Secundaria</div>
+                    <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> Otros</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- APARTADO 3: SUGERENCIAS DE COMPRA -->
+    <section class="mb-16">
+        <h2 class="text-xl font-bold mb-6 text-purple-700 uppercase tracking-wider">III. Sugerencias de Compra (Basado en ventas)</h2>
+        
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            
+            <!-- Tabla de Inventario (Ocupa 3 de 4 columnas) -->
+            <div class="xl:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-gray-400 text-xs uppercase font-black">
+                            <tr>
+                                <th class="px-6 py-4">Producto</th>
+                                <th class="px-6 py-4">Nivel de inventario</th>
+                                <th class="px-6 py-4 text-center">Ventas (4 sem)</th>
+                                <th class="px-6 py-4 text-center">Sugerencia</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            {% for p in inventario_detallado %}
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="p-2 bg-gray-50 rounded-lg">{{ p.icono }}</span>
+                                        <div>
+                                            <p class="text-sm font-bold text-gray-800">{{ p.producto }}</p>
+                                            <p class="text-[10px] text-gray-400 uppercase font-bold">{{ p.categoria }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="w-full max-w-[150px]">
+                                        <div class="flex justify-between mb-1 text-[10px] font-bold text-gray-500">
+                                            <span>Stock: {{ p.stock }}</span>
+                                            <span>{{ p.porcentaje_stock }}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-100 rounded-full h-1.5">
+                                            <div class="h-1.5 rounded-full {% if p.color == 'red' %}bg-red-500{% elif p.color == 'yellow' %}bg-yellow-400{% else %}bg-green-500{% endif %}" 
+                                                 style="width: {{ p.porcentaje_stock }}%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center font-black text-gray-700">
+                                    {{ p.ventas_recientes }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {% if p.estado == 'Crítico' %}
+                                        <a href="{% url 'resurtir_producto' p.id %}" class="inline-block bg-red-600 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-lg shadow-sm hover:bg-red-700 transition-colors">
+                                            Comprar
+                                        </a>
+                                    {% else %}
+                                        <button class="bg-gray-200 text-gray-500 text-[10px] font-black uppercase px-3 py-1.5 rounded-lg cursor-not-allowed">
+                                            No comprar
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Columna Lateral: Productos TOP para resurtir -->
+            <div class="bg-purple-900 p-6 rounded-2xl shadow-xl text-white">
+                <h3 class="text-sm font-black uppercase tracking-widest mb-6 border-b border-purple-800 pb-4">
+                    Productos TOP para resurtir
+                </h3>
+                <div class="space-y-6">
+                    {% for p in prioridad_resurtido %}
+                    <a href="{% url 'resurtir_producto' p.producto_id %}" class="flex items-center gap-4 group cursor-pointer hover:bg-purple-800/50 p-2 rounded-xl transition-all">
+                        <div class="p-2 bg-purple-800 rounded-xl group-hover:bg-purple-700 transition-colors">
+                            {{ p.icono }}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold leading-tight">{{ p.producto__nombre|truncatechars:20 }}</p>
+                            <p class="text-[10px] text-purple-300 font-bold uppercase mt-1">Relevancia: {{ p.volumen }} vtas</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- APARTADO 4: BALANCE DE LA EMPRESA -->
+    <section class="mb-10">
+        <h2 class="text-xl font-bold mb-6 text-purple-700 uppercase tracking-wider">IV. Balance de la Empresa (Ingresos netos online)</h2>
+        
+        <!-- Fila superior de métricas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Card Día -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-b-4 border-b-indigo-400">
+                <p class="text-sm text-gray-400 font-black uppercase mb-2">Último día (MXN)</p>
+                <p class="text-3xl font-black text-gray-800">${{ metricas.hoy|floatformat:2 }}</p>
+                <p class="text-[10px] text-gray-400 mt-2 font-bold uppercase tracking-widest">Ingreso Diario</p>
+            </div>
+            <!-- Card Semana -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-b-4 border-b-indigo-500">
+                <p class="text-sm text-gray-400 font-black uppercase mb-2">Última semana (MXN)</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl font-black text-gray-800">${{ metricas.semana|floatformat:2 }}</span>
+                    <span class="{% if comparativas.var_semana >= 0 %}text-green-500 bg-green-50{% else %}text-red-500 bg-red-50{% endif %} text-xs font-black px-2 py-1 rounded-lg">
+                        {{ comparativas.var_semana }}%
+                    </span>
+                </div>
+            </div>
+            <!-- Card Mes -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-b-4 border-b-indigo-600">
+                <p class="text-sm text-gray-400 font-black uppercase mb-2">Último mes (MXN)</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl font-black text-gray-800">${{ metricas.mes|floatformat:2 }}</span>
+                    <span class="{% if comparativas.var_mes >= 0 %}text-green-500 bg-green-50{% else %}text-red-500 bg-red-50{% endif %} text-xs font-black px-2 py-1 rounded-lg">
+                        {{ comparativas.var_mes }}%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico Inferior: Tendencia -->
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 class="text-lg font-bold text-gray-700 mb-8 flex items-center gap-2">
+                <span class="p-2 bg-indigo-50 rounded-lg">📈</span> Tendencia de ingresos mensuales
+            </h3>
+            <div class="w-full flex justify-center">
+                {% if balance_url %}
+                    <img src="{% static balance_url %}" alt="Tendencia Mensual" class="w-full max-w-5xl rounded-xl shadow-inner">
+                {% endif %}
+            </div>
+            <div class="mt-8 flex justify-center gap-10">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-teal-500"></span>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Histórico de Ingresos</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full border-2 border-teal-500 bg-white"></span>
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-tighter">Picos de Venta (Nodos)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

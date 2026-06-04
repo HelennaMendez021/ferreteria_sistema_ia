@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Ferreteria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .vapor-gradient {
+            background: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #60a5fa 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 selection:bg-purple-200">
+
+<nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-purple-100 px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+        <h1 class="font-bold text-xl tracking-tight text-purple-900">Mi Ferreteria</h1>
+    </div>
+
+    <div class="flex items-center gap-6">
+        <a href="/login/" class="text-sm font-medium text-slate-600 hover:text-purple-600 transition-colors">Login</a>
+        <a href="/registro/" class="text-sm bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-full font-semibold shadow-lg shadow-purple-200 transition-all active:scale-95">
+            Registrarse
+        </a>
+    </div>
+</nav>
+
+<section class="relative overflow-hidden vapor-gradient py-24 px-8 text-white">
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+    
+    <div class="relative max-w-4xl mx-auto text-center">
+        <span class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest uppercase bg-white/20 backdrop-blur-sm rounded-full">Tecnología & Herramientas</span>
+        <h2 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Todo lo que necesitas en herramientas
+        </h2>
+        <p class="text-xl text-purple-50 mb-10 max-w-2xl mx-auto font-light">
+            Compra inteligente con recomendaciones basadas en tus gustos
+        </p>
+
+        <a href="/dashboard/" class="inline-block bg-white text-purple-600 px-10 py-4 rounded-2xl font-bold shadow-2xl hover:shadow-purple-400/30 transition-all hover:-translate-y-1 active:translate-y-0">
+            Explorar productos
+        </a>
+    </div>
+</section>
+
+<section class="py-24 bg-white relative">
+    <div class="max-w-4xl mx-auto px-8">
+        <div class="flex flex-col items-center text-center">
+            <div class="w-12 h-1 bg-purple-200 mb-8 rounded-full"></div>
+            <h2 class="text-4xl font-bold mb-8 text-slate-800">Nuestra Trayectoria</h2>
+            <p class="text-slate-600 text-lg leading-relaxed font-light">
+                Desde 1985, <strong class="font-semibold text-purple-600">Mi Ferreteria</strong> ha sido el pilar de confianza para hogares y profesionales de la construcción. 
+                Lo que nació como un pequeño emprendimiento familiar, hoy evoluciona integrando <span class="text-indigo-500 italic">inteligencia artificial</span> 
+                para garantizar que encuentres exactamente lo que necesitas, cuando lo necesitas. 
+                Nuestra pasión por las herramientas solo es superada por nuestro compromiso con tu éxito.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 px-8 bg-slate-50">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-16 text-slate-800">¿Por qué elegirnos?</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="group bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300">
+                <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-slate-800">Recomendaciones inteligentes</h3>
+                <p class="text-slate-500 leading-relaxed">Usamos Machine Learning para sugerirte productos ideales</p>
+            </div>
+
+            <div class="group bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300">
+                <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-slate-800">Compra fácil</h3>
+                <p class="text-slate-500 leading-relaxed">Carrito rápido y proceso de compra sencillo</p>
+            </div>
+
+            <div class="group bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-300">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </div>
+                <h3 class="font-bold text-xl mb-3 text-slate-800">Gran catálogo</h3>
+                <p class="text-slate-500 leading-relaxed">Más de 1,000 productos disponibles</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white py-24">
+    <div class="max-w-6xl mx-auto px-8">
+        <div class="flex items-center justify-between mb-12">
+            <h2 class="text-3xl font-bold text-slate-800">Productos destacados</h2>
+            <div class="h-px bg-slate-100 flex-grow ml-8"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {% for p in productos %}
+            {% with icon_data=p.get_icon_data %}
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:border-purple-200 transition-all hover:bg-white hover:shadow-lg">
+                <div class="w-full aspect-square {{ icon_data.bg }} rounded-xl mb-4 flex items-center justify-center text-4xl">
+                    {{ icon_data.icon }}
+                </div>
+                <p class="font-bold text-slate-800 mb-1 line-clamp-1">{{ p.nombre }}</p>
+                <p class="text-purple-600 font-semibold text-lg">${{ p.precio }}</p>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="py-24 px-8">
+    <div class="max-w-5xl mx-auto vapor-gradient rounded-[3rem] p-12 text-center text-white shadow-2xl shadow-purple-200">
+        <h2 class="text-4xl font-bold mb-4">Empieza ahora</h2>
+        <p class="mb-10 text-purple-50 font-light opacity-90 text-lg">Regístrate y descubre recomendaciones personalizadas</p>
+
+        <a href="/registro/" class="inline-block bg-white text-purple-600 px-10 py-4 rounded-2xl font-bold shadow-xl hover:scale-105 transition-transform">
+            Crear cuenta
+        </a>
+    </div>
+</section>
+
+<section class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <div>
+            <h2 class="text-4xl font-bold mb-8 text-slate-800">Visítanos</h2>
+            <div class="space-y-8">
+                <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                        📍
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Dirección</h4>
+                        <p class="text-slate-500 leading-relaxed">Av. Constitución #1200, Lomas de Circunvalación, Colima, Col.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                        📞
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Teléfono</h4>
+                        <p class="text-slate-500">+52 (312) 312-4567</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
+                        ✉️
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Correo</h4>
+                        <p class="text-slate-500">contacto@miferreteria.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 shadow-inner">
+            <h2 class="text-2xl font-bold mb-8 text-slate-800 flex items-center gap-3">
+                <span class="text-purple-500">🕒</span> Horarios de Atención
+            </h2>
+            <ul class="space-y-6">
+                <li class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm">
+                    <span class="font-medium text-slate-600">Lunes a Viernes</span>
+                    <span class="font-bold text-purple-600">08:00 AM - 07:00 PM</span>
+                </li>
+                <li class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm">
+                    <span class="font-medium text-slate-600">Sábados</span>
+                    <span class="font-bold text-purple-600">09:00 AM - 05:00 PM</span>
+                </li>
+                <li class="flex justify-between items-center p-4">
+                    <span class="font-medium text-slate-400">Domingos</span>
+                    <span class="text-slate-400 italic bg-slate-100 px-4 py-1 rounded-full text-sm">Cerrado</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+<footer class="bg-slate-900 text-slate-400 py-12 px-8">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="flex items-center gap-2">
+            <span class="text-white font-bold tracking-tight">Mi Ferreteria</span>
+        </div>
+        <p class="text-sm">© 2026 Mi Ferreteria | Calidad garantizada desde 1985</p>
+        <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+            <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+            <a href="#" class="hover:text-white transition-colors">Términos</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Dashboard Inteligente de Ventas y Predicción</h1>
+        <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-bold border border-indigo-200">
+            Tendencia: {{ prediccion.tendencia }}
+        </span>
+    </div>
+
+    <!-- Tarjetas de Predicción -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-indigo-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Venta Predicha (Próximo Periodo)</p>
+            <p class="text-3xl font-bold text-indigo-600">${{ prediccion.prediccion }}</p>
+            <p class="text-xs text-gray-400 mt-2">Basado en regresión lineal histórica</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Crecimiento Diario Estimado</p>
+            <p class="text-3xl font-bold text-green-600">${{ prediccion.crecimiento_diario }}</p>
+            <p class="text-xs text-gray-400 mt-2">Aumento proyectado por cada día de operación</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+            <p class="text-sm text-gray-500 uppercase font-bold">Categoría Líder</p>
+            <p class="text-3xl font-bold text-yellow-600">{% if ventas_cat %}{{ ventas_cat.0.nombre }}{% else %}N/A{% endif %}</p>
+            <p class="text-xs text-gray-400 mt-2">Mayor volumen de ingresos acumulado</p>
+        </div>
+    </div>
+
+    <!-- Sección de Gráfica Centrada -->
+    <div class="flex justify-center mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-700 text-center">Ventas por Categoría</h2>
+            {% if grafica_ventas_url %}
+                <div class="flex justify-center">
+                    <img src="{% static grafica_ventas_url %}" alt="Gráfica de Ventas" class="rounded shadow-sm">
+                </div>
+            {% else %}
+                <p class="text-gray-500 italic text-center">No hay suficientes datos para generar la gráfica.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rotación de Productos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Top Productos -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-green-600">
+                <h2 class="text-white font-bold">Top 5: Productos Estrella</h2>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-xs text-gray-500">
+                    <tr>
+                        <th class="px-4 py-2">Producto</th>
+                        <th class="px-4 py-2">Ventas</th>
+                        <th class="px-4 py-2">Ingresos</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100">
+                    {% for p in top_productos %}
+                    <tr>
+                        <td class="px-4 py-2 font-medium">{{ p.nombre }}</td>
+                        <td class="px-4 py-2">{{ p.unidades_vendidas }}</td>
+                        <td class="px-4 py-2 text-green-600 font-bold">${{ p.ingresos|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Baja Rotación -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-red-600">
+                <h2 class="text-white font-bold">Baja Rotación: Productos Críticos</h2>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-xs text-gray-500">
+                    <tr>
+                        <th class="px-4 py-2">Producto</th>
+                        <th class="px-4 py-2">Ventas</th>
+                        <th class="px-4 py-2">Ingresos</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-gray-100">
+                    {% for p in bottom_productos %}
+                    <tr>
+                        <td class="px-4 py-2 font-medium">{{ p.nombre }}</td>
+                        <td class="px-4 py-2">{{ p.unidades_vendidas }}</td>
+                        <td class="px-4 py-2 text-red-600 font-bold">${{ p.ingresos|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

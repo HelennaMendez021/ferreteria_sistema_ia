@@ -1,0 +1,25 @@
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Entorno Virtual
+venv/
+ENV/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Imágenes generadas por IA (Analytics)
+# Ignoramos los .png pero permitimos archivos .gitkeep para mantener la estructura de carpetas
+tienda/static/charts/*.png
+!tienda/static/charts/.gitkeep
+
+# Sistema
+.DS_Store
+Thumbs.db
